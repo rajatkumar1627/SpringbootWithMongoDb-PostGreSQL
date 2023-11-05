@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee and Department Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 80%;
+      margin-top: 20px;
+      background-color: white;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      padding: 15px;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h1>Employee List</h1>
+  <table id="employeeTable">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h1>Department List</h1>
+  <ul id="department-list"></ul>
+</div>
+
+<script>
+  // Fetch and populate employee table
+  fetch('http://localhost:8080/api/employees')
+          .then(response => response.json())
+          .then(data => {
+            const tableBody = document.querySelector('#employeeTable tbody');
+            data.forEach(employee => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                        <td>${employee.id}</td>
+                        <td>${employee.firstName}</td>
+                        <td>${employee.lastName}</td>
+                        <td>${employee.email}</td>
+                    `;
+              tableBody.appendChild(row);
+            });
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+
+  // Fetch and populate department list
+  document.addEventListener('DOMContentLoaded', function () {
+    fetch('/departments/findAllDepartments')
+            .then(response => response.json())
+            .then(data => {
+              const departmentList = document.getElementById('department-list');
+              data.forEach(department => {
+                const listItem = document.createElement('li');
+                listItem.textContent = department.departmentName;
+                departmentList.appendChild(listItem);
+              });
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  });
+</script>
+</body>
+
+</html>

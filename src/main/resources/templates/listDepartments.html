@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Departments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>List of Departments</h2>
+    <table id="departmentTable">
+        <tr>
+            <th>Department ID</th>
+            <th>Department Name</th>
+        </tr>
+    </table>
+</div>
+<script>
+    fetch('/departments/findAllDepartments')
+        .then(response => response.json())
+        .then(departments => {
+            var departmentTable = document.getElementById('departmentTable');
+            departments.forEach(department => {
+                var row = departmentTable.insertRow();
+                row.insertCell(0).textContent = department.departmentId;
+                row.insertCell(1).textContent = department.departmentName;
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred while fetching departments.");
+        });
+</script>
+</body>
+</html>
